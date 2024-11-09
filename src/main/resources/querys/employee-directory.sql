@@ -1,19 +1,11 @@
-DROP TABLE IF EXISTS `employee`;
+CREATE TABLE IF NOT EXISTS spring_boot.employee (
+   id serial PRIMARY KEY NOT NULL,
+   first_name varchar (50) NOT NULL,
+   last_name varchar (50) NOT NULL,
+   email varchar (255) NOT NULL UNIQUE,
+   is_deleted BOOLEAN DEFAULT FALSE
+);
 
-CREATE TABLE `employee` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(45) DEFAULT NULL,
-  `last_name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `is_deleted` BOOLEAN DEFAULT TRUE,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
---
--- Data for table `employee`
---
-
-INSERT INTO `employee` VALUES 
-	(1,'vijay','murugan','vijay@gamil.com'),
-	(2,'jay','vijay','emma@gmail.com');
-
+INSERT INTO spring_boot.employee (first_name,last_name,email) VALUES 
+	('vijay','murugan','vijay@gamil.com'),
+	('jay','vijay','jay@gmail.com');
