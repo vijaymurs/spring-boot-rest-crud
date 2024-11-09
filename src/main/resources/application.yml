@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=spring_boot
     username: postgres
     password: vijay
     driver-class-name: org.postgresql.Driver
@@ -11,6 +11,4 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        default_schema: spring_boot
-    database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
