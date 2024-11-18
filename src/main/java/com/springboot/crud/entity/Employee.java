@@ -28,4 +28,7 @@ public class Employee {
 	@Column(name = "email")
 	private String email;
 	
+	@Column(name = "is_deleted")
+	private boolean isDeleted = false;
+	
 }
