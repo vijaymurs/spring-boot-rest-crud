@@ -6,7 +6,7 @@ import com.springboot.crud.entity.Employee;
 
 public interface EmployeesService {
 
-	List<Employee> findAllEmployee();
+	List<Employee> findAllEmployees();
 	
 	Employee getEmployee(int employeeId);
 	

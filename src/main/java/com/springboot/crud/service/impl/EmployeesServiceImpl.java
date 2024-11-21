@@ -1,59 +1,58 @@
 package com.springboot.crud.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.crud.entity.Employee;
+import com.springboot.crud.exception.ResourceNotFoundException;
 import com.springboot.crud.repository.EmployeesRepository;
 import com.springboot.crud.service.EmployeesService;
 
 @Service
 public class EmployeesServiceImpl implements EmployeesService {
-	
-	private EmployeesRepository employeesRepository;
-	
-	@Autowired
-	public void setEmployeesRepository(EmployeesRepository theEmployeesRepository) {
-		employeesRepository =  theEmployeesRepository;
-	}
 
-	@Override
-	public List<Employee> findAllEmployee() {		
-		return employeesRepository.findAll();
-	}
+    private final EmployeesRepository employeesRepository;
 
-	@Override
-	public Employee getEmployee(int employeeId) {
-		Optional<Employee> emp =  employeesRepository.findById(employeeId);
-		return (emp.isPresent() ? emp.get() : new Employee());
-	}
+    public EmployeesServiceImpl(EmployeesRepository employeesRepository) {
+        this.employeesRepository = employeesRepository;
+    }
 
-	@Override
-	public Employee addEmployee(Employee employee) {
-		return employeesRepository.save(employee);
-	}
+    @Override
+    public List<Employee> findAllEmployees() {
+        return employeesRepository.findAll();
+    }
 
-	@Override
-	public Employee updateEmployee(Employee employee) {
-		return employeesRepository.save(employee);
-	}
+    @Override
+    public Employee getEmployee(int employeeId) {
+        // Using Optional.orElseThrow to directly throw exception if employee is not found
+        return employeesRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id - " + employeeId));
+    }
 
-	@Override
-	public String deleteEmployee(int employeeId) {
-		Optional<Employee> emp =  employeesRepository.findById(employeeId);
-		if(emp.isPresent()) {
-			Employee employee =  emp.get();
-			employee.setDeleted(true);
-			employeesRepository.save(employee);
-			return "Deleted Employee Id is "+ employeeId;
-		} else {
-			return "Not found Employee Id "+ employeeId;
-		}
-		
-		
-	}
+    @Override
+    public Employee addEmployee(Employee employee) {
+        return employeesRepository.save(employee);
+    }
 
+    @Override
+    @Transactional
+    public Employee updateEmployee(Employee employee) {
+        if (!employeesRepository.existsById(employee.getId())) {
+            throw new RuntimeException("Employee not found with id - " + employee.getId());
+        }
+        return employeesRepository.save(employee);
+    }
+
+    @Override
+    public String deleteEmployee(int employeeId) {
+        Employee employee = employeesRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id - " + employeeId));
+        
+        employee.setDeleted(true);
+        // Save is required to persist the deleted status
+        employeesRepository.save(employee);
+        return "Employee with id " + employeeId + " marked as deleted.";
+    }
 }

@@ -6,8 +6,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update # create, update, create-drop, validate
-    show-sql: true # Set to false in production
+      ddl-auto: update  # Options: create, update, create-drop, validate
+    show-sql: true  # Set to false in production
     properties:
       hibernate:
         format_sql: true

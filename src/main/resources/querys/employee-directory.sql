@@ -1,11 +1,10 @@
+DROP TABLE IF  EXISTS spring_boot.employee;
 CREATE TABLE IF NOT EXISTS spring_boot.employee (
-   id serial PRIMARY KEY NOT NULL,
-   first_name varchar (50) NOT NULL,
-   last_name varchar (50) NOT NULL,
-   email varchar (255) NOT NULL UNIQUE,
-   is_deleted BOOLEAN DEFAULT FALSE
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
-
-INSERT INTO spring_boot.employee (first_name,last_name,email) VALUES 
-	('vijay','murugan','vijay@gamil.com'),
-	('jay','vijay','jay@gmail.com');
