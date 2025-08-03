@@ -21,14 +21,14 @@ public class EmployeesServiceImpl implements EmployeesService {
 
     @Override
     public List<Employee> findAllEmployees() {
-        return employeesRepository.findAll();
+        return employeesRepository.findByIsDeletedFalse();
     }
 
     @Override
     public Employee getEmployee(int employeeId) {
         // Using Optional.orElseThrow to directly throw exception if employee is not found
         return employeesRepository.findById(employeeId)
-                .orElseThrow(() -> new RuntimeException("Employee not found with id - " + employeeId));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id - " + employeeId));
     }
 
     @Override
@@ -40,12 +40,13 @@ public class EmployeesServiceImpl implements EmployeesService {
     @Transactional
     public Employee updateEmployee(Employee employee) {
         if (!employeesRepository.existsById(employee.getId())) {
-            throw new RuntimeException("Employee not found with id - " + employee.getId());
+            throw new ResourceNotFoundException("Employee not found with id - " + employee.getId());
         }
         return employeesRepository.save(employee);
     }
 
     @Override
+    @Transactional
     public String deleteEmployee(int employeeId) {
         Employee employee = employeesRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id - " + employeeId));
